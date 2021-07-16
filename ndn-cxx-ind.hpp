@@ -1,5 +1,7 @@
 #include <ndn-cxx/data.hpp>
 #include <ndn-ind/data.hpp>
+#include <ndn-cxx/interest.hpp>
+#include <ndn-ind/interest.hpp>
 #include <ndn-cxx/security/key-chain.hpp>
 
 namespace ndn {
@@ -15,6 +17,16 @@ public:
         ndn_ind::Data indData;
         indData.wireDecode(wireVec);
         return indData;
+    }
+
+    static ndn_ind::Interest
+    interest(const Interest& interest)
+    {
+        Block wire = interest.wireEncode();
+        std::vector<uint8_t> wireVec(wire.wire(), wire.wire() + wire.size());
+        ndn_ind::Interest indInterest;
+        indInterest.wireDecode(wireVec);
+        return indInterest;
     }
 
 private:

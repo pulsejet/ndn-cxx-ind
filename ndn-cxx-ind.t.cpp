@@ -12,7 +12,7 @@ BOOST_AUTO_TEST_CASE(cxx_ind_data_unsigned) {
 }
 
 BOOST_AUTO_TEST_CASE(cxx_ind_data_signed) {
-    std::string name = "/one/test";
+    std::string name = "/ndn/test";
     ndn::Data cxxData(name);
     ndn::KeyChain keyChain;
     keyChain.sign(cxxData);
@@ -25,4 +25,12 @@ BOOST_AUTO_TEST_CASE(cxx_ind_data_signed) {
     BOOST_CHECK_EQUAL(indData.getName().toUri(), name);
     BOOST_CHECK_EQUAL_COLLECTIONS(cxxSignBuf.begin(), cxxSignBuf.end(),
                                   indSignBuf->begin(), indSignBuf->end());
+}
+
+BOOST_AUTO_TEST_CASE(cxx_ind_interest) {
+    std::string name = "/ndn/test";
+    ndn::Interest cxxInterest(name, ndn::time::milliseconds(321));
+    ndn_ind::Interest indInterest = ndn::Ind::interest(cxxInterest);
+    BOOST_CHECK_EQUAL(indInterest.getName().toUri(), name);
+    BOOST_CHECK_EQUAL(indInterest.getInterestLifetimeMilliseconds(), 321);
 }
