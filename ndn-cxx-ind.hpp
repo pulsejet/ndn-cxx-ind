@@ -25,7 +25,7 @@ private:
             return data;
 
         Data signedData(data);
-        KeyChain keyChain;
+        KeyChain keyChain("pib-memory:", "tpm-memory:");
         keyChain.sign(signedData);
         return signedData;
     }
