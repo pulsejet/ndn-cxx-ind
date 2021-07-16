@@ -4,33 +4,38 @@
 
 #include "ndn-cxx-ind.hpp"
 
+std::string strName = "/one/test";
+
 BOOST_AUTO_TEST_CASE(cxx_ind_data_unsigned) {
-    std::string name = "/one/test";
-    ndn::Data cxxData(name);
-    ndn_ind::Data indData = ndn::Ind::data(cxxData);
-    BOOST_CHECK_EQUAL(indData.getName().toUri(), name);
+    ndn::Data cxxData(strName);
+    ndn_ind::Data indData = ndn::toInd(cxxData);
+    BOOST_CHECK_EQUAL(indData.getName().toUri(), strName);
 }
 
 BOOST_AUTO_TEST_CASE(cxx_ind_data_signed) {
-    std::string name = "/ndn/test";
-    ndn::Data cxxData(name);
+    ndn::Data cxxData(strName);
     ndn::KeyChain keyChain;
     keyChain.sign(cxxData);
     cxxData.wireEncode();
     auto cxxSignBuf = cxxData.getSignatureValue().blockFromValue();
 
-    ndn_ind::Data indData = ndn::Ind::data(cxxData);
+    ndn_ind::Data indData = ndn::toInd(cxxData);
     auto indSignBuf = indData.getSignature()->getSignature();
 
-    BOOST_CHECK_EQUAL(indData.getName().toUri(), name);
+    BOOST_CHECK_EQUAL(indData.getName().toUri(), strName);
     BOOST_CHECK_EQUAL_COLLECTIONS(cxxSignBuf.begin(), cxxSignBuf.end(),
                                   indSignBuf->begin(), indSignBuf->end());
 }
 
 BOOST_AUTO_TEST_CASE(cxx_ind_interest) {
-    std::string name = "/ndn/test";
-    ndn::Interest cxxInterest(name, ndn::time::milliseconds(321));
-    ndn_ind::Interest indInterest = ndn::Ind::interest(cxxInterest);
-    BOOST_CHECK_EQUAL(indInterest.getName().toUri(), name);
+    ndn::Interest cxxInterest(strName, ndn::time::milliseconds(321));
+    ndn_ind::Interest indInterest = ndn::toInd(cxxInterest);
+    BOOST_CHECK_EQUAL(indInterest.getName().toUri(), strName);
     BOOST_CHECK_EQUAL(indInterest.getInterestLifetimeMilliseconds(), 321);
+}
+
+BOOST_AUTO_TEST_CASE(cxx_ind_name) {
+    ndn::Name cxxName(strName);
+    ndn_ind::Name indName = ndn::toInd(cxxName);
+    BOOST_CHECK_EQUAL(indName.toUri(), strName);
 }
