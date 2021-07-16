@@ -1,11 +1,14 @@
+//  SPDX-FileCopyrightText: 2021 Varun Patil <varunpatil@ucla.edu>
+//  SPDX-License-Identifier: MIT
+
+#ifndef NDN_CXX_IND_HPP
+#define NDN_CXX_IND_HPP
+
 #include <ndn-cxx/data.hpp>
 #include <ndn-ind/data.hpp>
 #include <ndn-cxx/interest.hpp>
 #include <ndn-ind/interest.hpp>
 #include <ndn-cxx/security/key-chain.hpp>
-
-#ifndef NDN_CXX_IND_HPP
-#define NDN_CXX_IND_HPP
 
 namespace ndn {
 
