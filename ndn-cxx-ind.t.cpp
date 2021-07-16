@@ -39,3 +39,22 @@ BOOST_AUTO_TEST_CASE(cxx_ind_name) {
     ndn_ind::Name indName = ndn::toInd(cxxName);
     BOOST_CHECK_EQUAL(indName.toUri(), strName);
 }
+
+BOOST_AUTO_TEST_CASE(ind_cxx_data) {
+    ndn_ind::Data indData(strName);
+    ndn::Data cxxData = ndn_ind::toCxx(indData);
+    BOOST_CHECK_EQUAL(cxxData.getName().toUri(), strName);
+}
+
+BOOST_AUTO_TEST_CASE(ind_cxx_interest) {
+    ndn_ind::Interest indInterest(strName, std::chrono::milliseconds(321));
+    ndn::Interest cxxInterest = ndn_ind::toCxx(indInterest);
+    BOOST_CHECK_EQUAL(cxxInterest.getName().toUri(), strName);
+    BOOST_CHECK_EQUAL(cxxInterest.getInterestLifetime().count(), 321);
+}
+
+BOOST_AUTO_TEST_CASE(ind_cxx_name) {
+    ndn_ind::Name indName(strName);
+    ndn::Name cxxName = ndn_ind::toCxx(indName);
+    BOOST_CHECK_EQUAL(cxxName.toUri(), strName);
+}

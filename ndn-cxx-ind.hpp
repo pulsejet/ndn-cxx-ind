@@ -59,16 +59,33 @@ namespace ndn_ind {
 
 struct CxxInternal
 {
-
+    template <class N, class C>
+    static C
+    conv(const N& indInp)
+    {
+        auto wire = indInp.wireEncode();
+        C cxxOut;
+        cxxOut.wireDecode(ndn::Block(wire.buf(), wire.size()));
+        return cxxOut;
+    }
 };
 
 inline ndn::Data
-toCxx(const Data& cxxInp)
+toCxx(const Data& data)
 {
-    auto wire = cxxInp.wireEncode();
-    ndn::Data indOut;
-    indOut.wireDecode(ndn::Block(wire.buf(), wire.size()));
-    return indOut;
+    return CxxInternal::conv<Data, ndn::Data>(data);
+}
+
+inline ndn::Interest
+toCxx(const Interest& interest)
+{
+    return CxxInternal::conv<Interest, ndn::Interest>(interest);
+}
+
+inline ndn::Name
+toCxx(const Name& name)
+{
+    return CxxInternal::conv<Name, ndn::Name>(name);
 }
 
 } // namespace ndn_ind
